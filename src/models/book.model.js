@@ -4,10 +4,11 @@ module.exports = class Book {
   constructor(
     title = '',
     description = '',
-    authors = [],
+    authors = '',
     favorite = '',
     fileCover = '',
     fileName = '',
+    fileBook = '',
     id = uidGenerator.generateUniqueId()
   ) {
     this.id = id;
@@ -17,5 +18,6 @@ module.exports = class Book {
     this.favorite = favorite;
     this.fileCover = fileCover;
     this.fileName = fileName;
+    this.fileBook = fileBook;
   }
 };
