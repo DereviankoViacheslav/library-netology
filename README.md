@@ -1,12 +1,12 @@
 # library-netology
 
+[Сайт на Heroku](https://library-netology.herokuapp.com/)
+
 ## Запустить проект
 
 git clone
 
 cd <path_to_project>
-
-git checkout hw_2_2
 
 npm install
 
@@ -22,11 +22,11 @@ GET http://localhost:7000/api/books
 
 GET http://localhost:7000/api/books/{bookId}
 
-##### Создать книгу (данные передаать в body)
+##### Создать книгу (данные передавать в body)
 
 POST http://localhost:7000/api/books
 
-##### Редактировать книгу по id (данные передаать в body)
+##### Редактировать книгу по id (данные передавать в body)
 
 PUT http://localhost:7000/api/books/{bookId}
 
