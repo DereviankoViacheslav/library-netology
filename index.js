@@ -3,6 +3,8 @@ const express = require('express');
 const cors = require('cors');
 const { api, views } = require('./routes');
 
+const PORT = process.env.PORT || 3000;
+
 const app = express();
 
 app.use(express.json());
@@ -12,6 +14,6 @@ app.set('view engine', 'ejs');
 app.use(api);
 app.use(views);
 
-app.listen(process.env.PORT || 3000, () =>
-  console.log(`Server is running on ${process.env.PORT} port`)
+app.listen(PORT, () =>
+  console.log(`Server is running on ${PORT} port`)
 );

@@ -11,6 +11,13 @@ router.get('/', (req, res) => {
   });
 });
 
+router.get('/create', (req, res) => {
+  return res.status(200).render('book/create', {
+    title: '',
+    book: {}
+  });
+});
+
 router.get('/:bookId', (req, res) => {
   const { bookId } = req.params;
   const book = library.find(({ id }) => id === bookId);
@@ -20,13 +27,6 @@ router.get('/:bookId', (req, res) => {
   return res.status(200).render('book/view', {
     title: book.title,
     book
-  });
-});
-
-router.get('/create', (req, res) => {
-  return res.status(200).render('book/create', {
-    title: '',
-    book: {}
   });
 });
 
