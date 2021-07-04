@@ -12,6 +12,6 @@ app.set('view engine', 'ejs');
 app.use(api);
 app.use(views);
 
-app.listen(process.env.HTTP_PORT || 3000, () =>
-  console.log(`Server is running on ${process.env.HTTP_PORT} port`)
+app.listen(process.env.PORT || 3000, () =>
+  console.log(`Server is running on ${process.env.PORT} port`)
 );
