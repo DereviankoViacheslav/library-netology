@@ -1,5 +1,5 @@
 const express = require('express');
-const booksRouter = require('./book.router');
+const { booksRouter } = require('./book');
 
 const router = express.Router();
 
