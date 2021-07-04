@@ -14,6 +14,6 @@ app.set('view engine', 'ejs');
 app.use(api);
 app.use(views);
 
-app.listen(PORT, () =>
-  console.log(`Server is running on ${PORT} port`)
-);
+app.listen(PORT, () => {
+  console.log(`=== start server PORT ${PORT} ===`);
+});
