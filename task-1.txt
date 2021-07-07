@@ -1,0 +1,108 @@
+Команда:
+
+docker pull busybox
+
+Результат:
+
+Using default tag: latest
+latest: Pulling from library/busybox
+b71f96345d44: Pull complete 
+Digest: sha256:930490f97e5b921535c153e0e7110d251134cc4b72bbb8133c6a5065cc68580d
+Status: Downloaded newer image for busybox:latest
+docker.io/library/busybox:latest
+
+Команда:
+
+docker run --name pinger busybox ping -c 7 netology.ru
+
+Результат:
+
+PING netology.ru (104.22.49.171): 56 data bytes
+64 bytes from 104.22.49.171: seq=0 ttl=58 time=21.851 ms
+64 bytes from 104.22.49.171: seq=1 ttl=58 time=23.438 ms
+64 bytes from 104.22.49.171: seq=2 ttl=58 time=22.480 ms
+64 bytes from 104.22.49.171: seq=3 ttl=58 time=21.665 ms
+64 bytes from 104.22.49.171: seq=4 ttl=58 time=21.212 ms
+64 bytes from 104.22.49.171: seq=5 ttl=58 time=21.420 ms
+64 bytes from 104.22.49.171: seq=6 ttl=58 time=23.439 ms
+
+--- netology.ru ping statistics ---
+7 packets transmitted, 7 packets received, 0% packet loss
+round-trip min/avg/max = 21.212/22.215/23.439 ms
+
+Команда:
+
+docker ps -a
+
+Результат:
+
+CONTAINER ID  IMAGE     COMMAND                 CREATED    STATUS                PORTS   NAMES
+a5cf2045dc87  busybox   "ping -c 7 netology.…"  5 sec ago  Exited (0) 3 sec ago          pinger
+
+Команда:
+
+docker logs pinger
+
+Результат:
+
+PING netology.ru (104.22.49.171): 56 data bytes
+64 bytes from 104.22.49.171: seq=0 ttl=58 time=21.851 ms
+64 bytes from 104.22.49.171: seq=1 ttl=58 time=23.438 ms
+64 bytes from 104.22.49.171: seq=2 ttl=58 time=22.480 ms
+64 bytes from 104.22.49.171: seq=3 ttl=58 time=21.665 ms
+64 bytes from 104.22.49.171: seq=4 ttl=58 time=21.212 ms
+64 bytes from 104.22.49.171: seq=5 ttl=58 time=21.420 ms
+64 bytes from 104.22.49.171: seq=6 ttl=58 time=23.439 ms
+
+--- netology.ru ping statistics ---
+7 packets transmitted, 7 packets received, 0% packet loss
+round-trip min/avg/max = 21.212/22.215/23.439 ms
+
+Команда:
+
+docker start pinger
+
+Результат:
+
+CONTAINER ID  IMAGE     COMMAND                 CREATED         STATUS                 PORTS   NAMES
+a5cf2045dc87  busybox   "ping -c 7 netology.…"  15 minutes ago  Exited (0) 20 sec ago          pinger
+
+Команда:
+
+docker logs pinger
+
+Результат:
+
+PING netology.ru (104.22.49.171): 56 data bytes
+64 bytes from 104.22.49.171: seq=0 ttl=58 time=21.851 ms
+64 bytes from 104.22.49.171: seq=1 ttl=58 time=23.438 ms
+64 bytes from 104.22.49.171: seq=2 ttl=58 time=22.480 ms
+64 bytes from 104.22.49.171: seq=3 ttl=58 time=21.665 ms
+64 bytes from 104.22.49.171: seq=4 ttl=58 time=21.212 ms
+64 bytes from 104.22.49.171: seq=5 ttl=58 time=21.420 ms
+64 bytes from 104.22.49.171: seq=6 ttl=58 time=23.439 ms
+
+--- netology.ru ping statistics ---
+7 packets transmitted, 7 packets received, 0% packet loss
+round-trip min/avg/max = 21.212/22.215/23.439 ms
+PING netology.ru (172.67.43.83): 56 data bytes
+64 bytes from 172.67.43.83: seq=0 ttl=58 time=21.652 ms
+64 bytes from 172.67.43.83: seq=1 ttl=58 time=23.622 ms
+64 bytes from 172.67.43.83: seq=2 ttl=58 time=23.201 ms
+64 bytes from 172.67.43.83: seq=3 ttl=58 time=23.299 ms
+64 bytes from 172.67.43.83: seq=4 ttl=58 time=21.232 ms
+64 bytes from 172.67.43.83: seq=5 ttl=58 time=21.422 ms
+64 bytes from 172.67.43.83: seq=6 ttl=58 time=23.231 ms
+
+--- netology.ru ping statistics ---
+7 packets transmitted, 7 packets received, 0% packet loss
+round-trip min/avg/max = 21.232/22.522/23.622 ms
+
+Команда:
+
+docker rm pinger
+
+Команда:
+
+docker rmi busybox
+

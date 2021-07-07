@@ -1,0 +1,53 @@
+Команда:
+
+docker pull node:15.14
+
+Результат:
+
+15.14: Pulling from library/node
+bfde2ec33fbc: Pull complete 
+787f5e2f1047: Pull complete 
+7b6173a10eb8: Pull complete 
+dc05be471d51: Pull complete 
+55fab5cadd3c: Pull complete 
+bd821d20ef8c: Pull complete 
+6041b69671c6: Pull complete 
+989c5d2d2313: Pull complete 
+4b57d41e8391: Pull complete 
+Digest: sha256:608bba799613b1ebf754034ae008849ba51e88b23271412427b76d60ae0d0627
+Status: Downloaded newer image for node:15.14
+docker.io/library/node:15.14
+
+Команда:
+
+docker run -it -d --name first_node -v /data:/var/first/data node:15.14
+
+Результат:
+
+97f30bac636d3df72f6ee3d841d2cbc3decba2db2b2bd0bc21cd7d8bb342de1b
+
+Команда:
+
+docker run -it -d --name second_node -v /data:/var/second/data node:15.14
+
+Результат:
+
+73630f78d9fb85df54605d21f96c684d4505b4c5bbc8904147afbaed62b847a1
+
+Команда:
+
+docker exec -it first_node /bin/sh
+
+# cd /var/first/data
+# echo blabla > first.txt
+
+Команда:
+
+docker exec -it second_node /bin/sh
+
+# cd /var/second/data
+# ls
+first.txt
+# cat first.txt
+blabla
+
