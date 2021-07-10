@@ -18,6 +18,8 @@ include("../partials/menu") %>
         <p class="card-text"><%= book.fileCover %>.</p>
         <h5 class="card-title">Имя файла:</h5>
         <p class="card-text"><%= book.fileName %>.</p>
+        <h5 class="card-title">Количество просмотров:</h5>
+        <p class="card-text"><%= book.counter %>.</p>
 
         <div class="text-right">
           <a class="btn btn-sm btn-primary" href="/books/update/<%= book.id %>">

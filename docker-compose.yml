@@ -1,0 +1,16 @@
+services:
+  counter:
+    image: viacheslavd/counter-netology:latest
+    ports:
+      - 3001:5000
+    environment:
+      - PORT=5000
+  libnetology:
+    build: .
+    ports:
+      - 3000:3000
+    environment:
+      - PORT=3000
+      - COUNTER_URL=counter
+    links:
+      - counter

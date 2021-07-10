@@ -1,4 +1,5 @@
 const express = require('express');
+const axios = require('axios');
 const { multerMiddleware } = require('../../../middlewares');
 const { BookModel } = require('../../../models');
 const { library } = require('../../../repositories');
@@ -18,12 +19,22 @@ router.get('/create', (req, res) => {
   });
 });
 
-router.get('/:bookId', (req, res) => {
+router.get('/:bookId', async (req, res) => {
   const { bookId } = req.params;
-  const book = library.find(({ id }) => id === bookId);
+  let book = library.find(({ id }) => id === bookId);
   if (!book) {
     return res.status(404).redirect('/404');
   }
+  // await axios.post(`http://localhost:3001/counter/${bookId}/incr`);
+  await axios.post(`${process.env.COUNTER_URL}:3001/counter/${bookId}/incr`);
+  const {
+    data: { counter }
+  } = await axios.get(
+    // `http://localhost:3001/counter/${bookId}`
+    `${process.env.COUNTER_URL}:3001/counter/${bookId}`
+  );
+  book = { ...book, counter };
+  console.log('views book ===>>>', book);
   return res.status(200).render('book/view', {
     title: book.title,
     book
