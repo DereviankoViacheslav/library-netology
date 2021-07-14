@@ -29,8 +29,11 @@ db.books.find({ title: 'value' });
 db.books.updateOne(
   { _id_: 'bookId' },
   {
-    description: 'string',
-    authors: 'string'
+    $set: {
+      description: 'string',
+      authors: 'string'
+    }
   }
 );
+
 ```
