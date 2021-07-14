@@ -1,43 +1,36 @@
 # library-netology
 
-[Сайт на Heroku](https://library-netology.herokuapp.com/)
+### запрос для вставки данных о двух книгах в коллекцию books
 
-## Запустить проект
+```
+db.books.insertMany([
+  {
+    title: 'string',
+    description: 'string',
+    authors: 'string'
+  },
+  {
+    title: 'string',
+    description: 'string',
+    authors: 'string'
+  }
+]);
+```
 
-git clone
+### запрос для поиска документов коллекции books по полю title
 
-cd <path_to_project>
+```
+db.books.find({ title: 'value' });
+```
 
-npm install
+### запрос для редактирования полей: description и authors коллекции books по _id записи
 
-npm run start:dev
-
-### API
-
-##### Получить все книги
-
-GET http://localhost:7000/api/books
-
-##### Получить книгу по id
-
-GET http://localhost:7000/api/books/{bookId}
-
-##### Создать книгу (данные передавать в body)
-
-POST http://localhost:7000/api/books
-
-##### Редактировать книгу по id (данные передавать в body)
-
-PUT http://localhost:7000/api/books/{bookId}
-
-##### Удалить книгу по id
-
-DELETE http://localhost:7000/api/books/{bookId}
-
-##### Загрузить книгу на сервер
-
-POST http://localhost:7000/api/books/upload
-
-##### Скачать книгу c сервера по id
-
-GET http://localhost:7000/api/books/{bookId}
+```
+db.books.updateOne(
+  { _id_: 'bookId' },
+  {
+    description: 'string',
+    authors: 'string'
+  }
+);
+```
