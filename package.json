@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
-    "start:dev": "nodemon index.js"
+    "start:dev": "nodemon -L"
   },
   "repository": {
     "type": "git",
@@ -22,6 +22,7 @@
     "cors": "^2.8.5",
     "ejs": "^3.1.6",
     "express": "^4.17.1",
+    "mongoose": "^5.13.2",
     "multer": "^1.4.2",
     "node-unique-id-generator": "^0.1.0"
   },

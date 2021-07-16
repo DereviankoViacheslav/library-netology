@@ -1,32 +1,24 @@
 const express = require('express');
 const { multerMiddleware } = require('../../../middlewares');
 const { BookModel } = require('../../../models');
-const { library } = require('../../../repositories');
 const router = express.Router();
 
-router.get('/', (req, res) => {
-  return res.json(library);
+router.get('/', async (req, res) => {
+  const books = await BookModel.find();
+  return res.status(200).json(books);
 });
 
-router.get('/:bookId', (req, res) => {
+router.get('/:bookId', async (req, res) => {
   const { bookId } = req.params;
-  const book = library.find(({ id }) => id === bookId);
+  const book = await BookModel.findById(bookId).lean();
   if (!book) {
     return res.status(404).json('Not found');
   }
   return res.status(200).json(book);
 });
 
-router.post('/', (req, res) => {
-  const newBook = new BookModel(
-    req.body.title,
-    req.body.description,
-    req.body.authors,
-    req.body.favorite,
-    req.body.fileCover,
-    req.body.fileName
-  );
-  library.push(newBook);
+router.post('/', async (req, res) => {
+  const newBook = await BookModel.create(req.body);
   return res.status(201).json(newBook);
 });
 
@@ -34,50 +26,41 @@ router.post('/login', (req, res) => {
   res.status(201).json({ id: 1, email: 'test@mail.ru' });
 });
 
-router.put('/:bookId', (req, res) => {
+router.put('/:bookId', async (req, res) => {
   const { bookId } = req.params;
-  const book = library.find(({ id }) => id === bookId);
+  const book = await BookModel.findByIdAndUpdate(bookId, req.body, {
+    new: true
+  }).lean();
   if (!book) {
     return res.status(404).json('Not found');
   }
-  const { authors, title, description, favorite, fileCover, fileName } =
-    req.body;
-  book.authors = authors;
-  book.title = title;
-  book.description = description;
-  book.favorite = favorite;
-  book.fileCover = fileCover;
-  book.fileName = fileName;
   return res.status(201).json(book);
 });
 
-router.delete('/:bookId', (req, res) => {
+router.delete('/:bookId', async (req, res) => {
   const { bookId } = req.params;
-  const book = library.find(({ id }) => id === bookId);
+  const book = await BookModel.deleteOne({ _id: bookId });
   if (!book) {
     return res.status(404).json('Not found');
   }
-  library = library.filter(({ id }) => id !== bookId);
   return res.json('ok');
 });
 
-router.post('/upload', multerMiddleware.single('fileBook'), (req, res) => {
-  const newBook = new BookModel(
-    req.body.title,
-    req.body.description,
-    req.body.authors,
-    req.body.favorite,
-    req.body.fileCover,
-    req.body.fileName,
-    req.file.path
-  );
-  library.push(newBook);
-  return res.status(201).json(newBook);
-});
+router.post(
+  '/upload',
+  multerMiddleware.single('fileBook'),
+  async (req, res) => {
+    const newBook = await BookModel.create({
+      ...req.body,
+      fileBook: req.file.path
+    });
+    return res.status(201).json(newBook);
+  }
+);
 
-router.get('/:bookId/download', (req, res) => {
+router.get('/:bookId/download', async (req, res) => {
   const { bookId } = req.params;
-  const book = library.find(({ id }) => id === bookId);
+  const book = await BookModel.findById(bookId).lean();
   if (!book || !book.fileBook) {
     return res.status(404).json('Not found');
   }

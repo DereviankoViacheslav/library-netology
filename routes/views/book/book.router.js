@@ -2,13 +2,12 @@ const express = require('express');
 const axios = require('axios');
 const { multerMiddleware } = require('../../../middlewares');
 const { BookModel } = require('../../../models');
-const { library } = require('../../../repositories');
 const router = express.Router();
 
-router.get('/', (req, res) => {
+router.get('/', async (req, res) => {
   return res.status(200).render('book/index', {
     title: 'Список книг',
-    library
+    library: await BookModel.find()
   });
 });
 
@@ -21,27 +20,27 @@ router.get('/create', (req, res) => {
 
 router.get('/:bookId', async (req, res) => {
   const { bookId } = req.params;
-  let book = library.find(({ id }) => id === bookId);
+  let book = await BookModel.findById(bookId).lean();
   if (!book) {
     return res.status(404).redirect('/404');
   }
-  try {
-    await axios.post(`http://localhost:5000/counter/${bookId}/incr`);
-    // await axios.post(
-    //   `http://${process.env.COUNTER_URL}:3001/counter/${bookId}/incr`
-    // );
-  } catch (error) {
-    console.log('error POST ===>>>', error);
-  }
+  // try {
+  //   await axios.post(`http://localhost:5000/counter/${bookId}/incr`);
+  //   // await axios.post(
+  //   //   `http://${process.env.COUNTER_URL}:3001/counter/${bookId}/incr`
+  //   // );
+  // } catch (error) {
+  //   console.log('error POST ===>>>', error);
+  // }
   let result = null;
-  try {
-    result = await axios.get(
-      `http://localhost:5000/counter/${bookId}`
-      // `http://${process.env.COUNTER_URL}:3001/counter/${bookId}`
-    );
-  } catch (error) {
-    console.log('error GET ===>>>', error);
-  }
+  // try {
+  //   result = await axios.get(
+  //     `http://localhost:5000/counter/${bookId}`
+  //     // `http://${process.env.COUNTER_URL}:3001/counter/${bookId}`
+  //   );
+  // } catch (error) {
+  //   console.log('error GET ===>>>', error);
+  // }
   const counter = result ? result.data.counter : null;
   book = { ...book, counter };
   return res.status(200).render('book/view', {
@@ -50,23 +49,21 @@ router.get('/:bookId', async (req, res) => {
   });
 });
 
-router.post('/create', multerMiddleware.single('fileBook'), (req, res) => {
-  const newBook = new BookModel(
-    req.body.title,
-    req.body.description,
-    req.body.authors,
-    req.body.favorite,
-    req.body.fileCover,
-    req.body.fileName,
-    req.file?.path
-  );
-  library.push(newBook);
-  return res.status(200).redirect('/books');
-});
+router.post(
+  '/create',
+  multerMiddleware.single('fileBook'),
+  async (req, res) => {
+    const newBook = await BookModel.create({
+      ...req.body,
+      fileBook: req.file?.path
+    });
+    return res.status(200).redirect('/books');
+  }
+);
 
-router.get('/update/:bookId', (req, res) => {
+router.get('/update/:bookId', async (req, res) => {
   const { bookId } = req.params;
-  const book = library.find(({ id }) => id === bookId);
+  const book = await BookModel.findById(bookId).lean();
   if (!book) {
     return res.status(404).redirect('/404');
   }
@@ -79,38 +76,37 @@ router.get('/update/:bookId', (req, res) => {
 router.post(
   '/update/:bookId',
   multerMiddleware.single('fileBook'),
-  (req, res) => {
+  async (req, res) => {
     const { bookId } = req.params;
-    const book = library.find(({ id }) => id === bookId);
+    const book = await BookModel.findByIdAndUpdate(
+      bookId,
+      {
+        ...req.body,
+        fileBook: req.file?.path
+      },
+      {
+        new: true
+      }
+    ).lean();
     if (!book) {
       return res.status(404).redirect('/404');
     }
-    const { authors, title, description, favorite, fileCover, fileName } =
-      req.body;
-    book.authors = authors || book.authors;
-    book.title = title || book.title;
-    book.description = description || book.description;
-    book.favorite = favorite || book.favorite;
-    book.fileCover = fileCover || book.fileCover;
-    book.fileName = fileName || book.fileName;
-    book.fileBook = req.file?.path || book.fileBook;
     return res.status(200).redirect('/books');
   }
 );
 
-router.post('/delete/:bookId', (req, res) => {
+router.post('/delete/:bookId', async (req, res) => {
   const { bookId } = req.params;
-  const bookIdx = library.findIndex(({ id }) => id === bookId);
-  if (bookIdx === -1) {
+  const book = await BookModel.deleteOne({ _id: bookId });
+  if (!book) {
     return res.status(404).redirect('/404');
   }
-  library.splice(bookIdx, 1);
   return res.status(200).redirect('/books');
 });
 
-router.get('/download/:bookId', (req, res) => {
+router.get('/download/:bookId', async (req, res) => {
   const { bookId } = req.params;
-  const book = library.find(({ id }) => id === bookId);
+  const book = await BookModel.findById(bookId).lean();
   if (!book || !book.fileBook) {
     return res.status(404).redirect('/404');
   }
