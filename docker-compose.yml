@@ -8,9 +8,9 @@ services:
   libnetology:
     build: .
     ports:
-      - 3000:3000
+      - 3000:3002
     environment:
-      - PORT=3000
-      - COUNTER_URL=counter
+      - PORT=3002
+      - COUNTER_URL=http://counter:5000
     links:
       - counter

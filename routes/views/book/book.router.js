@@ -26,18 +26,18 @@ router.get('/:bookId', async (req, res) => {
     return res.status(404).redirect('/404');
   }
   try {
-    await axios.post(`http://localhost:5000/counter/${bookId}/incr`);
-    // await axios.post(
-    //   `http://${process.env.COUNTER_URL}:3001/counter/${bookId}/incr`
-    // );
+    // await axios.post(`http://localhost:5000/counter/${bookId}/incr`);
+    await axios.post(
+      `${process.env.COUNTER_URL}/counter/${bookId}/incr`
+    );
   } catch (error) {
     console.log('error POST ===>>>', error);
   }
   let result = null;
   try {
     result = await axios.get(
-      `http://localhost:5000/counter/${bookId}`
-      // `http://${process.env.COUNTER_URL}:3001/counter/${bookId}`
+      // `http://localhost:5000/counter/${bookId}`
+      `${process.env.COUNTER_URL}/counter/${bookId}`
     );
   } catch (error) {
     console.log('error GET ===>>>', error);
