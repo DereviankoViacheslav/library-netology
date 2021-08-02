@@ -3,7 +3,8 @@ const router = express.Router();
 
 router.get('/', (req, res) => {
   return res.render('main/main', {
-    title: 'Главная'
+    title: 'Главная',
+    isAuthorized: req.isAuthorized
   });
 });
 

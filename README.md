@@ -12,6 +12,10 @@ npm install
 
 npm run start:dev
 
+### В браузере
+
+GET http://localhost:3000
+
 ### API
 
 ##### Получить все книги

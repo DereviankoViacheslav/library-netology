@@ -1,5 +1,4 @@
 const express = require('express');
-const axios = require('axios');
 const { multerMiddleware } = require('../../../middlewares');
 const { BookModel } = require('../../../models');
 const router = express.Router();
@@ -7,14 +6,16 @@ const router = express.Router();
 router.get('/', async (req, res) => {
   return res.status(200).render('book/index', {
     title: 'Список книг',
-    library: await BookModel.find()
+    library: await BookModel.find(),
+    isAuthorized: req.isAuthorized
   });
 });
 
 router.get('/create', (req, res) => {
   return res.status(200).render('book/create', {
     title: '',
-    book: {}
+    book: {},
+    isAuthorized: req.isAuthorized
   });
 });
 
@@ -24,28 +25,13 @@ router.get('/:bookId', async (req, res) => {
   if (!book) {
     return res.status(404).redirect('/404');
   }
-  // try {
-  //   await axios.post(`http://localhost:5000/counter/${bookId}/incr`);
-  //   // await axios.post(
-  //   //   `http://${process.env.COUNTER_URL}:3001/counter/${bookId}/incr`
-  //   // );
-  // } catch (error) {
-  //   console.log('error POST ===>>>', error);
-  // }
   let result = null;
-  // try {
-  //   result = await axios.get(
-  //     `http://localhost:5000/counter/${bookId}`
-  //     // `http://${process.env.COUNTER_URL}:3001/counter/${bookId}`
-  //   );
-  // } catch (error) {
-  //   console.log('error GET ===>>>', error);
-  // }
   const counter = result ? result.data.counter : null;
   book = { ...book, counter };
   return res.status(200).render('book/view', {
     title: book.title,
-    book
+    book,
+    isAuthorized: req.isAuthorized
   });
 });
 
@@ -53,7 +39,8 @@ router.post(
   '/create',
   multerMiddleware.single('fileBook'),
   async (req, res) => {
-    const newBook = await BookModel.create({
+    console.log('post/books/create -->> req.body ===>>>', req.body);
+    await BookModel.create({
       ...req.body,
       fileBook: req.file?.path
     });
@@ -69,7 +56,8 @@ router.get('/update/:bookId', async (req, res) => {
   }
   return res.status(200).render('book/create', {
     title: `Редактировать книгу: ${book.title}`,
-    book
+    book,
+    isAuthorized: req.isAuthorized
   });
 });
 
