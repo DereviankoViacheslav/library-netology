@@ -39,7 +39,6 @@ router.post(
   '/create',
   multerMiddleware.single('fileBook'),
   async (req, res) => {
-    console.log('post/books/create -->> req.body ===>>>', req.body);
     await BookModel.create({
       ...req.body,
       fileBook: req.file?.path

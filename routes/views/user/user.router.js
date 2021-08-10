@@ -8,9 +8,9 @@ router.get('/me', isAuthenticatedMiddleware, (req, res) => {
   return res.render('profile/profile', {
     title: 'Мой профиль',
     user: {
-      id: '1234',
-      userName: 'username',
-      email: 'email'
+      id: req.user._id,
+      userName: req.user.userName,
+      email: req.user.email
     },
     isAuthorized: req.isAuthorized
   });
