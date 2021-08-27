@@ -1,16 +1,19 @@
 const express = require('express');
 const { multerMiddleware } = require('../../../middlewares');
-const { BookModel } = require('../../../models');
+const { BooksRepository } = require('../../../models/book/book.model');
+const { container } = require('../../../container');
 const router = express.Router();
 
 router.get('/', async (req, res) => {
-  const books = await BookModel.find();
+  const repo = container.get(BooksRepository);
+  const books = await repo.getBooks();
   return res.status(200).json(books);
 });
 
 router.get('/:bookId', async (req, res) => {
   const { bookId } = req.params;
-  const book = await BookModel.findById(bookId).lean();
+  const repo = container.get(BooksRepository);
+  const book = await repo.getBook(bookId);
   if (!book) {
     return res.status(404).json('Not found');
   }
@@ -18,7 +21,8 @@ router.get('/:bookId', async (req, res) => {
 });
 
 router.post('/', async (req, res) => {
-  const newBook = await BookModel.create(req.body);
+  const repo = container.get(BooksRepository);
+  const newBook = await repo.createBook(req.body);
   return res.status(201).json(newBook);
 });
 
@@ -28,9 +32,8 @@ router.post('/login', (req, res) => {
 
 router.put('/:bookId', async (req, res) => {
   const { bookId } = req.params;
-  const book = await BookModel.findByIdAndUpdate(bookId, req.body, {
-    new: true
-  }).lean();
+  const repo = container.get(BooksRepository);
+  const book = await repo.updateBook(bookId, req.body);
   if (!book) {
     return res.status(404).json('Not found');
   }
@@ -39,7 +42,8 @@ router.put('/:bookId', async (req, res) => {
 
 router.delete('/:bookId', async (req, res) => {
   const { bookId } = req.params;
-  const book = await BookModel.deleteOne({ _id: bookId });
+  const repo = container.get(BooksRepository);
+  const book = await repo.deleteBook(bookId);
   if (!book) {
     return res.status(404).json('Not found');
   }
@@ -50,7 +54,8 @@ router.post(
   '/upload',
   multerMiddleware.single('fileBook'),
   async (req, res) => {
-    const newBook = await BookModel.create({
+    const repo = container.get(BooksRepository);
+    const newBook = await repo.createBook({
       ...req.body,
       fileBook: req.file.path
     });
@@ -60,7 +65,8 @@ router.post(
 
 router.get('/:bookId/download', async (req, res) => {
   const { bookId } = req.params;
-  const book = await BookModel.findById(bookId).lean();
+  const repo = container.get(BooksRepository);
+  const book = await repo.getBook(bookId);
   if (!book || !book.fileBook) {
     return res.status(404).json('Not found');
   }

@@ -1,20 +1,13 @@
-const { Schema, model } = require('mongoose');
+import { Schema, model } from 'mongoose';
 
-interface Book {
+export interface Book {
   title: string;
-  description: string;
-  authors: string;
-  favorite: string;
-  fileCover: string;
-  fileName: string;
-}
-
-class BooksRepository {
-  createBook(book: Book) {}
-  getBook(id: string) {}
-  getBooks() {}
-  updateBook(id: string) {}
-  deleteBook(id: string) {}
+  description?: string;
+  authors?: string;
+  favorite?: string;
+  fileCover?: string;
+  fileName?: string;
+  fileBook?: string;
 }
 
 const BookSchema = new Schema({
@@ -26,4 +19,28 @@ const BookSchema = new Schema({
   fileName: { type: String, default: '' }
 });
 
-module.exports = model('Book', BookSchema);
+export const BookModel = model('Book', BookSchema);
+
+export class BooksRepository {
+  async createBook(book: Book) {
+    return await BookModel.create(book);
+  }
+
+  async getBook(bookId: string) {
+    return await BookModel.findById(bookId).lean();
+  }
+
+  async getBooks() {
+    return await BookModel.find();
+  }
+
+  async updateBook(bookId: string, data: Book) {
+    return await BookModel.findByIdAndUpdate(bookId, data, {
+      new: true
+    }).lean();
+  }
+
+  async deleteBook(bookId: string) {
+    return await BookModel.deleteOne({ _id: bookId });
+  }
+}

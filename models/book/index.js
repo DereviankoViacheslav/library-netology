@@ -1,3 +1,3 @@
-const BookModel = require('./book.model');
+const { BookModel } = require('./book.model.ts');
 
 module.exports = { BookModel };
