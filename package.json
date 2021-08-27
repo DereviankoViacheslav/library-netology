@@ -2,10 +2,10 @@
   "name": "library-netology",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "dist/index.js",
   "scripts": {
-    "start": "node index.js",
-    "start:dev": "nodemon -r dotenv/config -L",
+    "start": "node dist/web/index.js",
+    "start:dev": "nodemon -r dotenv/config dist/web/index.js",
     "build": "tsc --project ./tsconfig.json --watch",
     "eslint": "eslint --cache --ext .js,.ts ./"
   },
@@ -21,23 +21,15 @@
   "homepage": "https://github.com/DereviankoViacheslav/library-netology#readme",
   "dependencies": {
     "cors": "^2.8.5",
-    "ejs": "^3.1.6",
     "express": "^4.17.1",
-    "express-session": "^1.17.2",
     "inversify": "^5.1.1",
     "mongoose": "^5.13.2",
-    "multer": "^1.4.2",
-    "node-unique-id-generator": "^0.1.0",
-    "passport": "^0.4.1",
-    "passport-local": "^1.0.0",
-    "reflect-metadata": "^0.1.13",
-    "socket.io": "^4.1.3"
+    "reflect-metadata": "^0.1.13"
   },
   "devDependencies": {
-    "@typescript-eslint/eslint-plugin": "^4.29.3",
-    "@typescript-eslint/parser": "^4.29.3",
+    "@types/cors": "^2.8.12",
+    "@types/express": "^4.17.13",
     "dotenv": "^10.0.0",
-    "eslint": "^7.32.0",
     "nodemon": "^2.0.7",
     "typescript": "^4.3.5"
   }
